@@ -1,10 +1,38 @@
 # Importing the necessary libraries
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+import tensorflow as tf
 from sklearn.datasets import fetch_california_housing
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
 
 # Fetching the California Housing dataset
 housing = fetch_california_housing()
+
+# Convert to Dataframe for easier visualization.
+housing_df = pd.DataFrame(data=housing.data, columns=housing.feature_names)
+housing_df["Target"] = housing.target
+
+# Visualizing the data
+# Displaying the first few rows to see the structure
+print(housing_df.head())
+
+# Visualizing the distribution of the target variable
+plt.figure(figsize=(10, 6))
+sns.histplot(housing_df['Target'], bins=50, kde=True)
+plt.title('Distribution of House Values')
+plt.xlabel('Median House Value')
+plt.ylabel('Frequency')
+plt.savefig("output/03_02_distribution_plot.png")
+plt.close()
+
+# Pairplot of the features to understand relationships
+sns.pairplot(housing_df)
+plt.savefig('output/03_02_feature_pairplot.png')
+plt.close()
+
 
 # Splitting the data into training, validation, and test sets
 X_train_full, X_test, y_train_full, y_test = train_test_split(housing.data, housing.target, random_state=42)
