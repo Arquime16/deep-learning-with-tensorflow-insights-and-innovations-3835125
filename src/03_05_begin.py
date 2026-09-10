@@ -62,3 +62,32 @@ plt.ylabel('RMSE')
 plt.legend()
 
 plt.tight_layout()
+
+# Save the trained model
+model.save("output/03_05_trained_model.h5")
+
+# Load the model back
+loaded_model = tf.keras.models.load_model("output/03_05_trained_model.h5")
+
+# Evaluate the loaded model to confirm it is correctly loaded
+loaded_test-results = loaded_model.evaluate(X_test, y_test, return_dict = True) 
+print(f"Loaded Model Test Results" {loaded_test_results})
+
+# Compare predictions from the original and loaded models
+original_preds = model.predict(X_test) 
+loaded_preds = loaded_model.predict(X_test)
+
+# Assert to verify that the predictions are the same
+assert tf.reduce_all(tf.abs(original_preds - loaded_preds) < 1e-5), "Predictions differ between original and loaded models!"
+
+# Visualization of original and loaded model predictions
+plt.figure(figsize=(14, 7))
+plt.plot(original_preds, label='Original Model Predictions')
+plt.plot(loaded_preds, label='Loaded Model Predictions', linestyle='dashed')
+plt.title('Original vs Loaded Model Predictions')
+plt.xlabel('Sample Index')
+plt.ylabel('Predicted Value')
+plt.legend()
+
+# Save this visualization
+plt.savefig('output/03_05_model_comparison.png')
